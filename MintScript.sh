@@ -20,6 +20,8 @@ user_prompt(){
    [1] Add a new user
    [2] Remove a current user and their directories
    [3] Create a new password for a user
+   [4] Add a user as admin
+   [5] Remove a user as admin
   > " prompt
    case "${prompt}" in
       1 ) add_user;;
