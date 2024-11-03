@@ -180,7 +180,7 @@ remove_malware_hacking(){
    read -p "Is nc.traditional (netcat) listening? [y/n] > " prompt
    case "$prompt" in
       y ) cp /etc/crontab ~/Downloads/Backups/crontab
-      cp ~/Downloads/Linux/configs/crontab /etc/crontab
+      sudo cp ~/Downloads/Linux/configs/crontab /etc/crontab
       wait
       sudo pkill -f nc.traditional
       which nc.traditional
