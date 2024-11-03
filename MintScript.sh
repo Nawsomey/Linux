@@ -25,6 +25,8 @@ user_prompt(){
       1 ) add_user;;
       2 ) remove_user;;
       3 ) create_password;;
+      4 ) add_admin;;
+      5 ) remove_admin;;
    esac
 }
 add_user(){
@@ -41,6 +43,18 @@ remove_user(){
 create_password(){
    read -p "Enter username to create new password for: " username
    sudo passwd ${username}
+}
+add_admin(){
+   read -p "Enter username to add as admin: " username
+   sudo usermod -aG sudo ${username}
+   sudo usermod -aG adm ${username}
+   sudo usermod -aG lpadmin ${username}
+}
+remove_admin(){
+   read -p "Enter username to remove as admin: " username
+   sudo deluser ${username} sudo
+   sudo deluser ${username} adm
+   sudo deluser ${username} lpadmin
 }
 # Group Management
 group_management(){
@@ -66,17 +80,17 @@ update_password_req(){
    cp /etc/pam.d/common-password ~/Downloads/Backups/common-password
    cp /etc/pam.d/common-auth ~/Downloads/Backups/common-auth
    cp /etc/sysctl.conf ~/Downloads/Backups/sysctl.conf
-   cp ~/Downloads/Linux/configs/login.defs /etc/login.defs
-   cp ~/Downloads/Linux/configs/common-password /etc/pam.d/common-password
-   cp ~/Downloads/Linux/configs/common-auth /etc/pam.d/common-auth
-   cp ~/Downloads/Linux/configs/sysctl.conf /etc/sysctl.conf
+   sudo cp ~/Downloads/Linux/configs/login.defs /etc/login.defs
+   sudo cp ~/Downloads/Linux/configs/common-password /etc/pam.d/common-password
+   sudo cp ~/Downloads/Linux/configs/common-auth /etc/pam.d/common-auth
+   sudo cp ~/Downloads/Linux/configs/sysctl.conf /etc/sysctl.conf
    wait
    sudo sysctl --system
    sudo touch /usr/share/pam-configs/faillock
    sudo touch /usr/share/pam-configs/faillock_notify
    wait
-   cp ~/Downloads/Linux/configs/faillock /usr/share/pam-configs/faillock
-   cp ~/Downloads/Linux/configs/faillock_notify /usr/share/pam-configs/faillock_notify
+   sudo cp ~/Downloads/Linux/configs/faillock /usr/share/pam-configs/faillock
+   sudo cp ~/Downloads/Linux/configs/faillock_notify /usr/share/pam-configs/faillock_notify
    wait
    read -p "REMEMBER THIS!
    Select, with the spacebar, Notify on failed login attempts, and Enforce failed login attempt counter, then select <Ok>. Press [Enter] to continue." placeholder
@@ -142,8 +156,8 @@ disable_services(){
 updates_daily(){
    read -p "REMEMBER THIS!
    Configure these lines to have "1";
-   `APT::Periodic::Update-Package-Lists "1";`
-   `APT::Periodic::Unattended-Upgrade "1";`
+   APT::Periodic::Update-Package-Lists "1";
+   APT::Periodic::Unattended-Upgrade "1";
    Press [Enter] to continue." placeholder
    sudo nano /etc/apt/apt.conf.d/20auto-upgrades
    wait
@@ -210,17 +224,10 @@ cat << "EOF"
                     ██▓████▓░░▒▒████▓▒▒▒▓███        ██                     
                        █   █████████████            █████                  
                                   ██████            █████                  
-
-
-░▒▓███████▓▒░░▒▓██████████████▓▒░ ░▒▓██████▓▒░       ░▒▓████████▓▒░▒▓████████▓▒░░▒▓██████▓▒░░▒▓██████████████▓▒░  
-░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░ 
-░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░ 
-░▒▓███████▓▒░░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░         ░▒▓█▓▒░   ░▒▓██████▓▒░ ░▒▓████████▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░ 
-░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░ 
-░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░ 
-░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓████████▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓█▓▒░ 
-                                                                                                                  
-                                                                                                                  
+ ____       _  _   __     ____  ____   __   _  _ 
+(  _ \ ___ ( \/ ) / _\   (_  _)(  __) / _\ ( \/ )
+ )   /(___)/ \/ \/    \    )(   ) _) /    \/ \/ \
+(__\_)     \_)(_/\_/\_/   (__) (____)\_/\_/\_)(_/                                                                                                               
 EOF
    read -p "Select from one of the following choices:
    [1] Check for Updates
